@@ -1,5 +1,4 @@
 # Simple-CRUD-API
-# Assignment: CRUD API
 
 ## Description
 
