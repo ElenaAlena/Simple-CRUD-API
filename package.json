@@ -1,0 +1,25 @@
+{
+  "name": "simple-crud-api",
+  "version": "1.0.0",
+  "description": "Your task is to implement simple CRUD API using in-memory database underneath.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElenaAlena/Simple-CRUD-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ElenaAlena/Simple-CRUD-API/issues"
+  },
+  "homepage": "https://github.com/ElenaAlena/Simple-CRUD-API#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.17",
+    "typescript": "^4.9.4"
+  }
+}
