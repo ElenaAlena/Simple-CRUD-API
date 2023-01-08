@@ -1,8 +1,18 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { successResponse } from "../utils/notifications.js";
+import { invalidRequest, successResponse } from "../utils/notifications.js";
+import { parseBody } from "../utils/helper.js";
+import { ErrorsMessages } from "../config/messages.js";
 
-const addUser = (request: IncomingMessage, response: ServerResponse): void => {
-  successResponse(response, 200, `User was added successfully`);
+const addUser = async (
+  request: IncomingMessage,
+  response: ServerResponse
+): Promise<void> => {
+  try {
+    const requestBody = await parseBody(request);
+    if (requestBody) {
+      successResponse(response, 200, `User was added successfully`);
+    } else invalidRequest(response, ErrorsMessages.REQUIRED_FIELDS);
+  } catch (err) {}
 };
 
 const getUsers = (request: IncomingMessage, response: ServerResponse): void => {

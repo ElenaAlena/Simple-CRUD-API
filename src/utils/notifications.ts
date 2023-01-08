@@ -13,3 +13,13 @@ export const successResponse = (
   res.writeHead(statusCode, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
 };
+
+export const invalidRequest = (res: ServerResponse, message: string): void => {
+  res.writeHead(400, { "Content-Type": "application/json" });
+  res.end(
+    JSON.stringify({
+      ok: false,
+      message: message,
+    })
+  );
+};
