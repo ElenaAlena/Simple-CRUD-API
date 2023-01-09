@@ -1,4 +1,4 @@
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { IUser } from "../config/user.js";
 
 export class UserCollection {
@@ -12,32 +12,29 @@ export class UserCollection {
     return this._users.filter((user) => user.id === id)[0];
   }
 
-  create(data: IUser): IUser {
-    const user = { ...data, id: v4() };
+  public create(data: IUser): IUser {
+    const user = { ...data, id: uuidv4() };
     this._users.push(user);
     return user;
   }
 
-  update(id: string, data: IUser): IUser {
+  public update(id: string, data: IUser): IUser {
     const { username, age, hobbies } = data;
 
-    // Compare input data and save to existing object
-    const collectionKey = this._users.findIndex((user) => user.id === id);
-    const currentUser = this._users[collectionKey];
-    const newUser = Object.assign(currentUser, {
-      username,
-      age,
-      hobbies,
-    });
+    const currentUserId = this._users.findIndex((user) => user.id === id);
+    const currentUser = this._users[currentUserId];
 
-    this._users[collectionKey] = newUser;
+    this._users[currentUserId] = { ...currentUser, username, age, hobbies };
 
-    return newUser;
+    return this._users[currentUserId];
   }
 
-  delete(id: string): void {
-    const collectionKey = this._users.findIndex((user) => user.id === id);
+  public delete(id: string): void {
+    const currentUserId = this._users.findIndex((user) => user.id === id);
+    this._users.splice(currentUserId, 1);
+  }
 
-    this._users.splice(collectionKey, 1);
+  public get users(): Array<IUser> {
+    return this._users;
   }
 }

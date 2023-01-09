@@ -23,3 +23,8 @@ export const invalidRequest = (res: ServerResponse, message: string): void => {
     })
   );
 };
+
+export const internalServerError = (res: ServerResponse): void => {
+  res.statusCode = 500;
+  res.end("Internal Server Error");
+};
