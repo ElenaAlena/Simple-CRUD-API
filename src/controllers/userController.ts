@@ -1,4 +1,5 @@
 import { IncomingMessage, ServerResponse } from "http";
+import { validate } from "uuid";
 import {
   internalServerError,
   invalidRequest,
@@ -39,7 +40,20 @@ const getUsers = (request: IncomingMessage, response: ServerResponse): void => {
 };
 
 const getUser = (request: IncomingMessage, response: ServerResponse): void => {
-  successResponse(response, 200, `User`);
+  try {
+    const userId: string = request?.url?.split("/")[3] ?? "";
+    if (validate(userId)) {
+      const user: IUser | undefined = usersDb.getUserById(userId);
+      user
+        ? successResponse(response, 200, user)
+        : invalidRequest(response, ErrorsMessages.USER_NOT_EXIST);
+    } else {
+      invalidRequest(response, ErrorsMessages.USER_NOT_VALID);
+    }
+  } catch (err) {
+    console.log(err);
+    internalServerError(response);
+  }
 };
 
 const updateUser = (
