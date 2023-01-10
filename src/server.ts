@@ -16,19 +16,19 @@ const requestListener = async (req: IncomingMessage, res: ServerResponse) => {
     req?.method === "GET" &&
     req?.url?.startsWith(ROUTES.user)
   ) {
-    user.getUser(req, res);
+    user.getUser(req, res, withIdParam);
   } else if (
     withIdParam &&
     req?.method === "PUT" &&
     req?.url?.startsWith(ROUTES.user)
   ) {
-    user.updateUser(req, res);
+    user.updateUser(req, res, withIdParam);
   } else if (
     withIdParam &&
     req?.method === "DELETE" &&
     req?.url?.startsWith(ROUTES.user)
   ) {
-    user.deleteUser(req, res);
+    user.deleteUser(req, res, withIdParam);
   } else {
     serverError(res);
   }

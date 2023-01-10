@@ -18,10 +18,10 @@ const addUser = async (
   response: ServerResponse
 ): Promise<void> => {
   try {
-    const requestBody: IUser = await parseBody(request);
+    const requestBody: IUser | null = await parseBody(request);
     if (requestBody && validateUser(requestBody)) {
-      usersDb.create(requestBody);
-      successResponse(response, 200, requestBody);
+      const user = usersDb.create(requestBody);
+      successResponse(response, 200, user);
     } else invalidRequest(response, ErrorsMessages.REQUIRED_FIELDS);
   } catch (err) {
     console.log(err);
@@ -39,9 +39,12 @@ const getUsers = (request: IncomingMessage, response: ServerResponse): void => {
   }
 };
 
-const getUser = (request: IncomingMessage, response: ServerResponse): void => {
+const getUser = (
+  request: IncomingMessage,
+  response: ServerResponse,
+  userId: string
+): void => {
   try {
-    const userId: string = request?.url?.split("/")[3] ?? "";
     if (validate(userId)) {
       const user: IUser | undefined = usersDb.getUserById(userId);
       user
@@ -56,18 +59,51 @@ const getUser = (request: IncomingMessage, response: ServerResponse): void => {
   }
 };
 
-const updateUser = (
+const updateUser = async (
   request: IncomingMessage,
-  response: ServerResponse
-): void => {
-  successResponse(response, 200, `User was updated successfully`);
+  response: ServerResponse,
+  userId: string
+): Promise<void> => {
+  try {
+    if (validate(userId)) {
+      const user: IUser | undefined = usersDb.getUserById(userId);
+      const requestBody: IUser | null = await parseBody(request);
+      if (user && requestBody && validateUser(requestBody)) {
+        const updatedUser = usersDb.update(userId, requestBody);
+        successResponse(response, 200, updatedUser);
+      } else
+        user
+          ? invalidRequest(response, ErrorsMessages.REQUIRED_FIELDS)
+          : invalidRequest(response, ErrorsMessages.USER_NOT_EXIST);
+    } else {
+      invalidRequest(response, ErrorsMessages.USER_NOT_VALID);
+    }
+  } catch (err) {
+    console.log(err);
+    internalServerError(response);
+  }
 };
 
-const deleteUser = (
+const deleteUser = async (
   request: IncomingMessage,
-  response: ServerResponse
-): void => {
-  successResponse(response, 200, `User was deletd successfully`);
+  response: ServerResponse,
+  userId: string
+): Promise<void> => {
+  try {
+    if (validate(userId)) {
+      const user: IUser | undefined = usersDb.getUserById(userId);
+
+      if (user) {
+        usersDb.delete(userId);
+        successResponse(response, 200, "User was successfuly deleted");
+      } else invalidRequest(response, ErrorsMessages.USER_NOT_EXIST);
+    } else {
+      invalidRequest(response, ErrorsMessages.USER_NOT_VALID);
+    }
+  } catch (err) {
+    console.log(err);
+    internalServerError(response);
+  }
 };
 
 export const user = {

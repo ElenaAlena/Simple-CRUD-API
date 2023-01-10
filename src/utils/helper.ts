@@ -1,14 +1,18 @@
 import { IncomingMessage } from "http";
-import { ROUTES } from "../config/routes.js";
 import { IUser } from "../config/user.js";
 
-export const parseBody = (request: IncomingMessage): Promise<IUser> => {
+export const parseBody = (request: IncomingMessage): Promise<IUser | null> => {
   return new Promise((resolve, reject) => {
-    request.setEncoding('utf-8');
+    request.setEncoding("utf-8");
     let body: string = "";
     request
       .on("data", (chunk) => (body += chunk.toString()))
-      .on("end", () => resolve(JSON.parse(body)))
-      .on("error", (err) => reject(err));
+      .on("end", () => {
+        try {
+          resolve(JSON.parse(body));
+        } catch {
+          resolve(null);
+        }
+      });
   });
 };
