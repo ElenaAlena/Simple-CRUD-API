@@ -2,20 +2,32 @@ import http, { IncomingMessage, ServerResponse } from "http";
 import { ROUTES } from "./config/routes.js";
 
 import { user } from "./controllers/userController.js";
-import { urlMatch } from "./utils/helper.js";
 
 import { serverError } from "./utils/notifications.js";
 
 const requestListener = async (req: IncomingMessage, res: ServerResponse) => {
+  const withIdParam: string | undefined = req?.url?.split("/")[3];
   if (req?.url === ROUTES.users && req?.method === "GET") {
     user.getUsers(req, res);
   } else if (req?.url === ROUTES.users && req?.method === "POST") {
     user.addUser(req, res);
-  } else if (req?.method === "GET" && urlMatch(req?.url)) {
+  } else if (
+    withIdParam &&
+    req?.method === "GET" &&
+    req?.url?.startsWith(ROUTES.user)
+  ) {
     user.getUser(req, res);
-  } else if (req?.method === "PUT" && urlMatch(req?.url)) {
+  } else if (
+    withIdParam &&
+    req?.method === "PUT" &&
+    req?.url?.startsWith(ROUTES.user)
+  ) {
     user.updateUser(req, res);
-  } else if (req?.method === "DELETE" && urlMatch(req?.url)) {
+  } else if (
+    withIdParam &&
+    req?.method === "DELETE" &&
+    req?.url?.startsWith(ROUTES.user)
+  ) {
     user.deleteUser(req, res);
   } else {
     serverError(res);
