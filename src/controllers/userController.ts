@@ -11,11 +11,10 @@ import { validateUser } from "../utils/validation.js";
 import { IUser } from "../config/user.js";
 import { UserCollection } from "../utils/usersList.js";
 
-const usersDb = new UserCollection([]);
-
 const addUser = async (
   request: IncomingMessage,
-  response: ServerResponse
+  response: ServerResponse,
+  usersDb: UserCollection
 ): Promise<void> => {
   try {
     const requestBody: IUser | null = await parseBody(request);
@@ -29,7 +28,11 @@ const addUser = async (
   }
 };
 
-const getUsers = (request: IncomingMessage, response: ServerResponse): void => {
+const getUsers = (
+  request: IncomingMessage,
+  response: ServerResponse,
+  usersDb: UserCollection
+): void => {
   try {
     const users: Array<IUser> = usersDb.users;
     successResponse(response, 200, users);
@@ -42,7 +45,8 @@ const getUsers = (request: IncomingMessage, response: ServerResponse): void => {
 const getUser = (
   request: IncomingMessage,
   response: ServerResponse,
-  userId: string
+  userId: string,
+  usersDb: UserCollection
 ): void => {
   try {
     if (validate(userId)) {
@@ -62,7 +66,8 @@ const getUser = (
 const updateUser = async (
   request: IncomingMessage,
   response: ServerResponse,
-  userId: string
+  userId: string,
+  usersDb: UserCollection
 ): Promise<void> => {
   try {
     if (validate(userId)) {
@@ -87,7 +92,8 @@ const updateUser = async (
 const deleteUser = async (
   request: IncomingMessage,
   response: ServerResponse,
-  userId: string
+  userId: string,
+  usersDb: UserCollection
 ): Promise<void> => {
   try {
     if (validate(userId)) {

@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx nodemon",
     "build": "npx tsc",
-    "start": "npm run build && node build/main"
+    "start:dev": "npx nodemon",
+    "start:prod": "npm run build && node build/main"
   },
   "repository": {
     "type": "git",
