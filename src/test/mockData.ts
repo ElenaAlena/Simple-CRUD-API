@@ -10,7 +10,7 @@ export const mockData = {
     hobbies: ["test_hobby"],
   },
   invalidUserData: {
-    age: 18,
+    username: "testUser",
     hobbies: ["test_hobby"],
   },
 };

@@ -1,7 +1,7 @@
 import cluster from "cluster";
 import http, { IncomingMessage, RequestListener, ServerResponse } from "http";
 import { cpus } from "os";
-import { UserCollection } from "../../utils/usersList.js";
+import { UserCollection } from "../utils/usersList.js";
 import { App } from "./app.js";
 
 export class ClusterApp {

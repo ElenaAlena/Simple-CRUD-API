@@ -1,8 +1,8 @@
 import { resolve } from "path";
 import * as dotenv from "dotenv";
 import { UserCollection } from "./utils/usersList.js";
-import { App } from "./controllers/modules/app.js";
-import { ClusterApp } from "./controllers/modules/cluster.js";
+import { App } from "./modules/app.js";
+import { ClusterApp } from "./modules/cluster.js";
 
 const envPath = resolve(process.cwd(), ".env");
 

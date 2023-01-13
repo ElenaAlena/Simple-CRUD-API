@@ -2,7 +2,7 @@ import { Server } from "http";
 import { resolve } from "path";
 import request from "supertest";
 import * as dotenv from "dotenv";
-import { App } from "../controllers/modules/app.js";
+import { App } from "../modules/app.js";
 import { IUser } from "../config/user.js";
 import { UserCollection } from "../utils/usersList.js";
 import { mockData } from "./mockData.js";

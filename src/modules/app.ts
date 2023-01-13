@@ -5,10 +5,10 @@ import http, {
   Server,
   ServerResponse,
 } from "http";
-import { ROUTES } from "../../config/routes.js";
-import { serverError } from "../../utils/notifications.js";
-import { UserCollection } from "../../utils/usersList.js";
-import { user } from "../userController.js";
+import { ROUTES } from "../config/routes.js";
+import { user } from "../controllers/userController.js";
+import { serverError } from "../utils/notifications.js";
+import { UserCollection } from "../utils/usersList.js";
 
 export class App {
   private _usersDb: UserCollection;
