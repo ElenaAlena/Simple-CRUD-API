@@ -8,7 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "start:dev": "npx nodemon",
-    "start:prod": "npm run build && node build/main"
+    "start:multidev": "npm run start:dev -- --multi",    
+    "start:prod": "npm run build && node build/main",
+    "start:multi": "npm run start:prod -- --multi" 
   },
   "repository": {
     "type": "git",

@@ -37,4 +37,7 @@ export class UserCollection {
   public get users(): Array<IUser> {
     return this._users;
   }
+  public set users(data: Array<IUser>) {
+    this._users = data;
+  }
 }

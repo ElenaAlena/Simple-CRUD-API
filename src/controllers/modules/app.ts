@@ -1,3 +1,4 @@
+import cluster from "cluster";
 import http, {
   IncomingMessage,
   RequestListener,
@@ -34,7 +35,7 @@ export class App {
     if (req?.url === ROUTES.users && req?.method === "GET") {
       user.getUsers(req, res, this.usersDb);
     } else if (req?.url === ROUTES.users && req?.method === "POST") {
-      user.addUser(req, res, this.usersDb);
+      await user.addUser(req, res, this.usersDb);
     } else if (
       withIdParam &&
       req?.method === "GET" &&
@@ -52,9 +53,13 @@ export class App {
       req?.method === "DELETE" &&
       req?.url?.startsWith(ROUTES.user)
     ) {
-      user.deleteUser(req, res, withIdParam, this.usersDb);
+      await user.deleteUser(req, res, withIdParam, this.usersDb);
     } else {
       serverError(res);
+    }
+
+    if (cluster.isWorker) {
+      process.send!(this._usersDb.users);
     }
   };
 
@@ -64,5 +69,9 @@ export class App {
 
   public set usersDb(users: UserCollection) {
     this._usersDb = users;
+  }
+
+  public get server(): Server {
+    return this._server;
   }
 }
