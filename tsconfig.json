@@ -99,7 +99,8 @@
   //],
   "exclude": [
     "node_modules",
-    "./src/test"
+    "./src/test",
+    "jest.config.ts"
   ],
   "lib": [
     "esnext"

@@ -3,6 +3,6 @@
         "src"
     ],
     "ext": ".ts,.js",
-    "ignore": [],
+    "ignore": ["./src/test"],
     "exec": "npx ts-node ./src/main.ts"
 }

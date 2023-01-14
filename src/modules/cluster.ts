@@ -1,6 +1,7 @@
 import cluster from "cluster";
 import http, { IncomingMessage, RequestListener, ServerResponse } from "http";
 import { cpus } from "os";
+import { internalServerError } from "../utils/notifications.js";
 import { UserCollection } from "../utils/usersList.js";
 import { App } from "./app.js";
 
@@ -8,13 +9,13 @@ export class ClusterApp {
   private _usersDb: UserCollection;
   private _curWorker = 1;
   private _primaryPort: number;
-  private _numWorkers;
+  private _numWorkers: number;
 
   constructor(users: UserCollection, port: number) {
     this._usersDb = users;
     this._primaryPort = port;
     this._numWorkers = cpus().length;
-    cluster.isWorker ? this.startPrimaryServer() : this.startChildServer();
+    cluster.isWorker ? this.startChildServer() : this.startPrimaryServer();
   }
 
   private requestListener: RequestListener = async (
@@ -33,7 +34,14 @@ export class ClusterApp {
       this._curWorker =
         this._curWorker >= this._numWorkers ? 1 : ++this._curWorker;
     });
+    requestForWorker.on("error", (e) => {
+      internalServerError(res);
+      console.error("Child server is not started yet");
+    });
     req.pipe(requestForWorker);
+    process.on("uncaughtException", (res) => {
+      console.log("Child server is not started yet2");
+    });
   };
 
   private startPrimaryServer(): void {
@@ -41,6 +49,9 @@ export class ClusterApp {
       const worker = cluster.fork({ CHILD_PORT: this._primaryPort + i });
       worker.on("message", (data) => {
         this._usersDb.users = data;
+      });
+      process.on("SIGINT", () => {
+        process.exit();
       });
     }
     const server = http.createServer(this.requestListener);
