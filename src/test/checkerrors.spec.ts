@@ -13,7 +13,7 @@ const envPath = resolve(process.cwd(), ".env");
 dotenv.config({ path: envPath });
 
 const usersDb = new UserCollection([]);
-const port = +(process.env.PORT ?? 3000);
+const port = +(process.env.TEST_PORT ?? 4000);
 
 describe("CRUD API errors:", () => {
   let server: Server;
