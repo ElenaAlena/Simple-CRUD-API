@@ -72,10 +72,7 @@ describe("CRUD API errors:", () => {
   it(`There is no such user`, async () => {
     const res = await request(server).delete(`/api/users/${uuidId}`);
 
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual({
-      message: ErrorsMessages.USER_NOT_EXIST,
-      ok: false,
-    });
+    expect(res.statusCode).toBe(404);
+    expect(res.text).toEqual(ErrorsMessages.USER_NOT_EXIST);
   });
 });

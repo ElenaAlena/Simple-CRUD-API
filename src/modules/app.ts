@@ -5,6 +5,7 @@ import http, {
   Server,
   ServerResponse,
 } from "http";
+import { ErrorsMessages } from "../config/messages.js";
 import { ROUTES } from "../config/routes.js";
 import { user } from "../controllers/userController.js";
 import { serverError } from "../utils/notifications.js";
@@ -23,7 +24,9 @@ export class App {
 
   public startServer(): void {
     this._server.listen(this._port, () => {
-      console.log(`Server has been started on ${this._port} port`);
+      if (cluster.isWorker) {
+        console.log(`Child server has been started on ${this._port} port`);
+      } else console.log(`Server has been started on ${this._port} port`);
     });
   }
 
@@ -55,7 +58,7 @@ export class App {
     ) {
       await user.deleteUser(req, res, withIdParam, this.usersDb);
     } else {
-      serverError(res);
+      serverError(res, ErrorsMessages.PAGE_NOT_FOUND);
     }
 
     if (cluster.isWorker) {

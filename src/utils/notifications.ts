@@ -1,8 +1,8 @@
 import { ServerResponse } from "http";
 
-export const serverError = (res: ServerResponse): void => {
+export const serverError = (res: ServerResponse, message?: string): void => {
   res.statusCode = 404;
-  res.end();
+  message ? res.end(message) : res.end();
 };
 
 export const successResponse = (
@@ -23,7 +23,6 @@ export const invalidRequest = (res: ServerResponse, message: string): void => {
     })
   );
 };
-
 export const internalServerError = (res: ServerResponse): void => {
   res.statusCode = 500;
   res.end("Internal Server Error");

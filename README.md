@@ -2,7 +2,20 @@
 
 ## Description
 
-Your task is to implement simple CRUD API using in-memory database underneath.
+This is simple CRUD API using in-memory database underneath.
+
+## Installation GUID
+
+- You should install dependencies. For that run:
+   `npm i`
+- Add `.env` file. You can see `.env.example` as example for it. If `PORT` won't be added server will started on 3000 PORT by default.
+- You will have 4 modes to start:
+    1) `npm run start:dev` - will start one process in dev mode
+    2) `npm run start:prod` - will start one process in prod mode
+    3) `npm run start:multidev` - - will start cluster in dev mode
+    4) `npm run start:multi` - will start cluster in prod mode
+- Also you can run test scenarios:
+    `npm test`
 
 ## Technical requirements
 

@@ -6,6 +6,7 @@ import { App } from "../modules/app.js";
 import { IUser } from "../config/user.js";
 import { UserCollection } from "../utils/usersList.js";
 import { mockData } from "./mockData.js";
+import { ErrorsMessages } from "../config/messages.js";
 
 const envPath = resolve(process.cwd(), ".env");
 dotenv.config({ path: envPath });
@@ -76,7 +77,7 @@ describe("CRUD API:", () => {
   it("Try to receive deleted/non-existent user", async () => {
     const res = await request(server).get(`/api/users/${userId}`);
 
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual({ message: "There is no such user", ok: false });
+    expect(res.statusCode).toBe(404);
+    expect(res.text).toEqual(ErrorsMessages.USER_NOT_EXIST);
   });
 });

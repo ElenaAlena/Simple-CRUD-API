@@ -3,6 +3,7 @@ import { validate } from "uuid";
 import {
   internalServerError,
   invalidRequest,
+  serverError,
   successResponse,
 } from "../utils/notifications.js";
 import { parseBody } from "../utils/helper.js";
@@ -53,7 +54,7 @@ const getUser = (
       const user: IUser | undefined = usersDb.getUserById(userId);
       user
         ? successResponse(response, 200, user)
-        : invalidRequest(response, ErrorsMessages.USER_NOT_EXIST);
+        : serverError(response, ErrorsMessages.USER_NOT_EXIST);
     } else {
       invalidRequest(response, ErrorsMessages.USER_NOT_VALID);
     }
@@ -79,7 +80,7 @@ const updateUser = async (
       } else
         user
           ? invalidRequest(response, ErrorsMessages.REQUIRED_FIELDS)
-          : invalidRequest(response, ErrorsMessages.USER_NOT_EXIST);
+          : serverError(response, ErrorsMessages.USER_NOT_EXIST);
     } else {
       invalidRequest(response, ErrorsMessages.USER_NOT_VALID);
     }
@@ -102,7 +103,7 @@ const deleteUser = async (
       if (user) {
         usersDb.delete(userId);
         successResponse(response, 200, "User was successfuly deleted");
-      } else invalidRequest(response, ErrorsMessages.USER_NOT_EXIST);
+      } else serverError(response, ErrorsMessages.USER_NOT_EXIST);
     } else {
       invalidRequest(response, ErrorsMessages.USER_NOT_VALID);
     }
