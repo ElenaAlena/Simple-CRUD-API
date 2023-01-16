@@ -15,3 +15,7 @@ if (process.argv.includes("--multi")) {
 } else {
   new App(usersDb, +(process.env.PORT ?? 3000)).startServer();
 }
+
+process.on("SIGINT", () => {
+  process.exit();
+});
